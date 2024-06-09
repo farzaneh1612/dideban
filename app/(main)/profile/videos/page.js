@@ -58,7 +58,7 @@ const headCells = [
 // },
 ];
 
-export default function Videoss() {
+export default function Videos() {
   const [openModalInformation, setOpenModalInformation] = useState(false);
   const [openModaShowe, setOpenModaShowe] = useState(false);
   const [videosCount, setVideosCount] = useState([{title:'تعداد کل ویدئوهای جلسات', number:345806, icon:<SuccessUsers/>},{title:'تعداد کل ویدئوهای کاربران', number:1041843, icon:<SessionOngoing/>}])

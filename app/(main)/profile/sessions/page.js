@@ -288,7 +288,8 @@ export default function Sessions() {
         "scheduled_at": 1716465685
     }
 ],);
-const [sessions, setSessions] = useState([{title:'جلسات موفق', number:1860, icon:<SuccessUsers/>},{title:' جلسات در حال برگزاری', number:1860, icon:<SessionOngoing />},{title:'جلسات لغو شده', number:1860, icon:<SessionDelete/>}])
+const [countSessions, setCountSessions] = useState()
+const [sessions, setSessions] = useState([{title:'جلسات موفق', icon:<SuccessUsers/>},{title:' جلسات در حال برگزاری', icon:<SessionOngoing />},{title:'جلسات لغو شده', icon:<SessionDelete/>}])
 const [openModalInformation, setOpenModalInformation] = useState(false);
 const [lInformationRoom, setlInformationRoom] = useState(
   {
@@ -330,6 +331,43 @@ const [lInformationRoom, setlInformationRoom] = useState(
 //     notify(e?.response?.data?.message, "error");
 //   }
 //       }
+
+const getAllSessions = async () => {
+  const body = {
+    offset: 0,
+    limit: 15,
+    get_total: true
+}
+  try {
+    const { data } = await http.post(GetSessions, body);
+    setRoomsInfo(data?.data?.rooms);
+    
+   
+  } catch (e) {
+    notify(e?.response?.data?.message, "error");
+  }
+};
+
+ const getCountSessions = async () =>{
+  try {
+        const { data } = await http.get(GetSessionsContent);
+        const statusKeys = ['success', 'on_going', 'failed']
+
+      sessions.forEach((session, index) => {
+          const key = statusKeys[index];
+          session.number = data.data[key];
+      });
+
+      } catch (e) {
+        notify(e?.response?.data?.message, "error");
+      }
+ }
+
+useEffect(() => {
+  getAllSessions()
+  getCountSessions()
+
+}, [])
  const rows = roomsInfo?.map((room,index)=>(
   createData( index,
     {image:room?.creator_info?.image?<Image src="image:room?.creator_info?.image" alt="" width={38} height={38} />:<Image src="/image/Avatar.png" alt="" width={38} height={38} />,
@@ -357,40 +395,7 @@ const [lInformationRoom, setlInformationRoom] = useState(
  
   
 
-  // const getAllSessions = async () => {
-  //   const body = {
-  //     offset: 0,
-  //     limit: 5,
-  //     get_total: true
-  // }
-  //   try {
-  //     const { data } = await http.post(GetSessions, body);
-  //     console.log("aaaaaaaaaaaaa",data);
-  //     setRoomsInfo(data?.rooms);
-      
-     
-  //   } catch (e) {
-  //     notify(e?.response?.data?.message, "error");
-  //   }
-  // };
-
-  //  const getCountSessions = async () =>{
-  //   try {
-  //         const { data } = await http.get(GetSessionsContent);
-  //         console.log("aaaaaaaaaaaaa",data);
-  //         setSessions();
-          
-         
-  //       } catch (e) {
-  //         notify(e?.response?.data?.message, "error");
-  //       }
-  //  }
-
-  // useEffect(() => {
-  //   getAllSessions()
-  //   getCountSessions()
-  
-  // }, [])
+ 
   
   return (
     <>

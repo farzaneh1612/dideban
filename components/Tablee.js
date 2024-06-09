@@ -128,7 +128,7 @@ export default function EnhancedTable({rows, headCells, headTitle, addIcon=false
 
   const handleSelectAllClick = (event) => {
     if (event.target.checked) {
-      const newSelected = rows.map((n) => n.id);
+      const newSelected = rows?.map((n) => n.id);
       setSelected(newSelected);
       return;
     }
@@ -165,9 +165,9 @@ export default function EnhancedTable({rows, headCells, headTitle, addIcon=false
    
   };
 
-  const totalPages = Math.ceil(rows.length / pageSize);
+  const totalPages = Math.ceil(rows?.length / pageSize);
 
-  const pageContent = rows.slice((page - 1) * pageSize, page * pageSize);
+  const pageContent = rows?.slice((page - 1) * pageSize, page * pageSize);
 
 
   const isSelected = (id) => selected.indexOf(id) !== -1;
@@ -194,13 +194,13 @@ const theme = useTheme()
               orderBy={orderBy}
               onSelectAllClick={handleSelectAllClick}
               onRequestSort={handleRequestSort}
-              rowCount={rows.length}
+              rowCount={rows?.length}
               headCells={headCells}
               headTitle={headTitle}
 
             />
             <TableBody>
-              {pageContent.map((row, index) => {
+              {pageContent?.map((row, index) => {
                 const isItemSelected = isSelected(row.id);
                 const labelId = `enhanced-table-checkbox-${index}`;
 

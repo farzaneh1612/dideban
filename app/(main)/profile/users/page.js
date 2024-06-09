@@ -1,7 +1,7 @@
 
 "use client";
 
-import { useState } from 'react';
+import { useState,useEffect } from 'react';
 import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
 import { Container, IconButton, Typography, styled } from '@mui/material';
@@ -13,6 +13,9 @@ import { formatDateJalali } from '@/utils/helpers/formatDateJalali';
 import WrapperInformation from './Component/WrapperInformation';
 import Modal from '@/components/Modal';
 import { GetUserList, UserCount, GetSessionsDetails,RemoveBanUser,AddBanUser } from "@/app/api/api";
+import useNotify from "@/hooks/useNotify";
+
+
 
 
 const sessions = [{title:' تعداد کل کاربران ', number:345806, icon:<SuccessUsers/>},{title:' تعداد کاربران آنلاین  ', number:1041843, icon:<SessionOngoing/>}]
@@ -56,33 +59,11 @@ const headCells = [
 // },
 ];
 
-export default function Videoss() {
+export default function Users() {
 
   const [userList, setUserList] = useState([{manager:'سعید عزت الهی', numberOfmember:14, status:'موفق', action:true},{manager:'سعید عزت الهی', numberOfmember:14, status:'موفق', action:true},{manager:'سعید عزت الهی', numberOfmember:14, status:'موفق', action:true}]);
-  const [users, setUsers] = useState([
+  const [users, setUsers] = useState([   
     {
-        "user": {
-            "id": "",
-            "first_name": "سعید ",
-            "last_name": "عزت الهی",
-            "national_code": "00768567878567",
-            "username": ""
-        },
-        "status": "on_going",
-        "first": 1716468058,
-    },
-    {
-      "user": {
-          "id": "",
-          "first_name": "سعید ",
-          "last_name": "عزت الهی",
-          "national_code": "00768567878567",
-          "username": ""
-      },
-      "status": "on_going",
-      "first": 1716468058,
-  }, 
-  {
     "user": {
         "id": "",
         "first_name": "سعید ",
@@ -91,54 +72,112 @@ export default function Videoss() {
         "username": ""
     },
     "status": "on_going",
-    "first": 1716468058,
-}, 
-{
-  "user": {
-      "id": "",
-      "first_name": "سعید ",
-      "last_name": "عزت الهی",
-      "national_code": "00768567878567",
-      "username": ""
-  },
-  "status": "on_going",
-  "first": 1716468058,
-}, 
-{
-  "user": {
-      "id": "",
-      "first_name": "سعید ",
-      "last_name": "عزت الهی",
-      "national_code": "00768567878567",
-      "username": ""
-  },
-  "status": "on_going",
-  "first": 1716468058,
-}, 
-{
-  "user": {
-      "id": "",
-      "first_name": "سعید ",
-      "last_name": "عزت الهی",
-      "national_code": "00768567878567",
-      "username": ""
-  },
-  "status": "on_going ",
-  "first": 1716468058,
-}, {
-  "user": {
-      "id": "",
-      "first_name": "سعید ",
-      "last_name": "عزت الهی",
-      "national_code": "00768567878567",
-      "username": ""
-  },
-  "status": "on_going",
-  "first": 1716468058,
+    "first_occurrence": 1717406330,
 },
-],);
+{
+  "user": {
+      "id": "",
+      "first_name": "سعید ",
+      "last_name": "عزت الهی",
+      "national_code": "00768567878567",
+      "username": ""
+  },
+  "status": "on_going",
+  "first_occurrence": 1716468058,
+}, 
+{
+"user": {
+    "id": "",
+    "first_name": "سعید ",
+    "last_name": "عزت الهی",
+    "national_code": "00768567878567",
+    "username": ""
+},
+"status": "on_going",
+"first_occurrence": 1716468058,
+}, 
+{
+"user": {
+  "id": "",
+  "first_name": "سعید ",
+  "last_name": "عزت الهی",
+  "national_code": "00768567878567",
+  "username": ""
+},
+"status": "on_going",
+"first_occurrence": 1716468058,
+}, 
+{
+"user": {
+  "id": "",
+  "first_name": "سعید ",
+  "last_name": "عزت الهی",
+  "national_code": "00768567878567",
+  "username": ""
+},
+"status": "on_going",
+"first_occurrence": 1716468058,
+}, 
+{
+"user": {
+  "id": "",
+  "first_name": "سعید ",
+  "last_name": "عزت الهی",
+  "national_code": "00768567878567",
+  "username": ""
+},
+"status": "on_going ",
+"first_occurrence": 1716468058,
+}, {
+"user": {
+  "id": "",
+  "first_name": "سعید ",
+  "last_name": "عزت الهی",
+  "national_code": "00768567878567",
+  "username": ""
+},
+"status": "on_going",
+"first_occurrence": 1716468058,
+},],);
 const [openModalInformation, setOpenModalInformation] = useState(false);
 const [InformationUser, setInformationUser] = useState();
+
+const notify = useNotify();
+const getAllUsers = async () => {
+  const body = {
+    offset: 0,
+    limit: 5,
+    get_total: true
+}
+  try {
+    const { data } = await http.post(GetUserList, body);
+    console.log({data});
+    setUsers(data?.data?.users);
+    
+   
+  } catch (e) {
+    notify(e?.response?.data?.message, "error");
+  }
+};
+
+ const getCountUser = async () =>{
+  try {
+        const { data } = await http.get(UserCount);
+        console.log("useeeeer",data);
+        
+       
+      } catch (e) {
+        notify(e?.response?.data?.message, "error");
+      }
+ }
+
+
+useEffect(() => {
+  getAllUsers()
+  getCountUser()
+
+}, [])
+
 
 function createData(id,manager, numberOfmember, statusSession, actions,)
   {
@@ -151,73 +190,39 @@ function createData(id,manager, numberOfmember, statusSession, actions,)
   };
 }
 
-  // const getAllUsers = async () => {
-  //   const body = {
-  //     offset: 0,
-  //     limit: 100,
-  //     get_total: true
-  // }
-  //   try {
-  //     const { data } = await http.post(GetUserList, body);
-  //     setUsers(data?.rooms);
-      
-     
-  //   } catch (e) {
-  //     notify(e?.response?.data?.message, "error");
-  //   }
-  // };
 
-  //  const getCountUser = async () =>{
-  //   try {
-  //         const { data } = await http.get(UserCount);
-  //         console.log("aaaaaaaaaaaaa",data);
-  //         setSessions();
-          
-         
-  //       } catch (e) {
-  //         notify(e?.response?.data?.message, "error");
-  //       }
-  //  }
-  
+  const banUser = async (userId) =>{
+    const body = {
+      user_id:userId
+      }
+    try { 
+    setLoading(true);
+      const { data } = await httpToken.post(AddBanUser, body );
+      notify(data.message, "success");
+           } catch (e) {
+          notify(e?.response?.data?.message, "error");
+        }
+   }
 
-  // useEffect(() => {
-  //   getAllUsers()
-  //   getCountUser()
-  
-  // }, [])
-  
-  //const banUser = async (userId) =>{
-    // const body = {
-    //   user_id:userId
-    //   }
-  //   try { 
-    // setLoading(true);
-    //   const { data } = await httpToken.post(AddBanUser, body );
-    //   notify("data.message, "success");
-     //       } catch (e) {
-  //         notify(e?.response?.data?.message, "error");
-  //       }
-  //  }
-
-  //const removeBanUser = async (userId) =>{
-    // const body = {
-    //   user_id:userId
-    //   }
-  //   try { 
-    // setLoading(true);
-    //   const { data } = await httpToken.post(RemoveBanUser, body );
-    //   notify("data.message, "success");
-     //       } catch (e) {
-  //         notify(e?.response?.data?.message, "error");
-  //       }
-  //  }
+  const removeBanUser = async (userId) =>{
+    const body = {
+      user_id:userId
+      }
+    try { 
+    setLoading(true);
+      const { data } = await httpToken.post(RemoveBanUser, body );
+      notify(data.message, "success");
+           } catch (e) {
+          notify(e?.response?.data?.message, "error");
+        }
+   }
 
 const rows = users?.map((user,index)=>(
   createData( index,
     {
-      name: `${user?.user?.first_name} ${user?.user?.last_name}`,
-      natinalityCode: user?.user?.national_code,}, 
-      formatDateJalali(user?.first),
+      name: `${user?.first_name} ${user?.last_name}`,
+      natinalityCode: user?.national_code,}, 
+      formatDateJalali(user?.first_occurrence),
       
         <Box display="flex" justifyContent="center">
           {user?.status == "on_going"?<Box sx={{background:"#7367f024", borderRadius:"6px"}} p={0.5} ><Typography variant='subtitle2' fontWeight={400}  color="button.secondary">فعال</Typography></Box>:
