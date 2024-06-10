@@ -246,8 +246,8 @@ const rows = users?.map((user,index)=>(
        disabled={user?.status !== "on_going"}
          color="text"
          onClick={() => {
-           setOpenModalInformation(true);
-         //banUser(user.id)
+          //  setOpenModalInformation(true);
+         banUser(user.id)
          }}
        >
         <BanIcon/>
@@ -256,8 +256,8 @@ const rows = users?.map((user,index)=>(
        disabled={user?.status == "on_going"}
          color="text.gray"
          onClick={() => {
-           setOpenModalInformation(true);
-         //removeBanUser(user.id)
+          //  setOpenModalInformation(true);
+         removeBanUser(user.id)
          }}
        >
         <BanIcon/>
