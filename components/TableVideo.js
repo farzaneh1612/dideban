@@ -108,7 +108,7 @@ EnhancedTableHead.propTypes = {
 };
 
 
-export default function EnhancedTable({rows, headCells, headTitle, addIcon=false, screenIcon=false, deleteUser=false,isCheckbox=false}) {
+export default function EnhancedTable({rows,banRows, headCells, headTitle, addIcon=false, screenIcon=false, deleteUser=false,isCheckbox=false}) {
   const [order, setOrder] = React.useState('asc');
   const [orderBy, setOrderBy] = React.useState('calories');
   const [selected, setSelected] = React.useState([]);
@@ -121,7 +121,6 @@ export default function EnhancedTable({rows, headCells, headTitle, addIcon=false
     setOrder(isAsc ? 'desc' : 'asc');
     setOrderBy(property);
   };
-
   const handleSelectAllClick = (event) => {
     if (event.target.checked) {
       const newSelected = rows.map((n) => n.id);
@@ -199,11 +198,12 @@ const theme = useTheme()
               {pageContent.map((row, index) => {
                 const isItemSelected = isSelected(row.id);
                 const labelId = `enhanced-table-checkbox-${index}`;
-
+                const isBanned = banRows.has(row.id);
                 return (
                   <TableRow
                     hover
-                    onClick={(event) => handleClick(event, row.id)}
+                    style={{ backgroundColor: isBanned ? 'red' : 'inherit' }}
+                    // onClick={(event) => handleClick(event, row.id)}
                     role="checkbox"
                     aria-checked={isItemSelected}
                     tabIndex={-1}
@@ -218,6 +218,8 @@ const theme = useTheme()
                         inputProps={{
                           'aria-labelledby': labelId,
                         }}
+                        onClick={(event) => handleClick(event, row.id)}
+
                       />
                     </TableCell>}
                     

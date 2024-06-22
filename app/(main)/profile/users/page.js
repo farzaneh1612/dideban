@@ -5,7 +5,7 @@ import { useState,useEffect } from 'react';
 import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
 import { Container, IconButton, Typography, styled } from '@mui/material';
-import { BanIcon, Eye, SessionOngoing, SuccessUsers, Trash } from '@/public/Icon';
+import { BanIcon, Eye, SessionOngoing, SuccessUsers } from '@/public/Icon';
 import Item from '../../_components/Header/_components/SessionsInfo';
 import TableUsers from '@/components/TableUsers';
 import { formatPrice } from '@/utils/helpers/formatPrice';
@@ -14,6 +14,8 @@ import WrapperInformation from './Component/WrapperInformation';
 import Modal from '@/components/Modal';
 import { GetUserList, UserCount, GetSessionsDetails,RemoveBanUser,AddBanUser } from "@/app/api/api";
 import useNotify from "@/hooks/useNotify";
+import http from "@/config/http";
+
 
 
 
@@ -140,13 +142,15 @@ export default function Users() {
 "first_occurrence": 1716468058,
 },],);
 const [openModalInformation, setOpenModalInformation] = useState(false);
+const [banRows, setBanRows] = useState(new Set());
+
 const [InformationUser, setInformationUser] = useState();
 
 const notify = useNotify();
 const getAllUsers = async () => {
   const body = {
     offset: 0,
-    limit: 5,
+    limit: 14,
     get_total: true
 }
   try {
@@ -196,9 +200,11 @@ function createData(id,manager, numberOfmember, statusSession, actions,)
       user_id:userId
       }
     try { 
-    setLoading(true);
-      const { data } = await httpToken.post(AddBanUser, body );
+      const { data } = await http.post(AddBanUser, body );
+      console.log({data});
+      setBanRows((prev) => new Set(prev).add(userId));
       notify(data.message, "success");
+      getAllUsers()
            } catch (e) {
           notify(e?.response?.data?.message, "error");
         }
@@ -209,8 +215,8 @@ function createData(id,manager, numberOfmember, statusSession, actions,)
       user_id:userId
       }
     try { 
-    setLoading(true);
-      const { data } = await httpToken.post(RemoveBanUser, body );
+      const { data } = await http.delete(RemoveBanUser, body );
+    getAllUsers()
       notify(data.message, "success");
            } catch (e) {
           notify(e?.response?.data?.message, "error");
@@ -220,8 +226,8 @@ function createData(id,manager, numberOfmember, statusSession, actions,)
 const rows = users?.map((user,index)=>(
   createData( index,
     {
-      name: `${user?.first_name} ${user?.last_name}`,
-      natinalityCode: user?.national_code,}, 
+      name: `${user?.user?.first_name} ${user?.user?.last_name}`,
+      natinalityCode: user?.user?.national_code,}, 
       formatDateJalali(user?.first_occurrence),
       
         <Box display="flex" justifyContent="center">
@@ -243,30 +249,28 @@ const rows = users?.map((user,index)=>(
        ban:
        user?.status == "on_going" ?
        (<IconButton
-       disabled={user?.status !== "on_going"}
+      //  disabled={banRow}
          color="text"
          onClick={() => {
           //  setOpenModalInformation(true);
-         banUser(user.id)
+         banUser(user?.user?.id)
          }}
        >
         <BanIcon/>
        </IconButton>)
        :(<IconButton
-       disabled={user?.status == "on_going"}
-         color="text.gray"
          onClick={() => {
           //  setOpenModalInformation(true);
-         removeBanUser(user.id)
+         removeBanUser(user?.user?.id)
          }}
        >
-        <BanIcon/>
+        <SuccessUsers/>
        </IconButton>)
        
        } )),
        
 );   
- 
+
   return (
     <>
        <Container>
@@ -300,7 +304,7 @@ const rows = users?.map((user,index)=>(
         </Grid>
     <Grid item xs={12}>
     <Box pt={2}>
-      <TableUsers rows={rows} headCells={headCells} deleteUser={true} isCheckbox={true} />
+      <TableUsers banRows={banRows} rows={rows} headCells={headCells} deleteUser={true} isCheckbox={true} />
 
     </Box>
     </Grid>

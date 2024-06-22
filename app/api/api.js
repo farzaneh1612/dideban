@@ -102,11 +102,13 @@ export const GetSessionsDetails = (RoomId) =>
 export const SearchSessionByCode = (RoomId) =>
   `api/cmr/rm/room/r/${RoomId}`;
 
-export const GetAllVideos = `api/cmf/fl/files`;
+export const  GetAllVideos = `/api/cmf/fl/files`;
 
 export const DetailsOfFile = (RoomId) => `/api/cmf/fl/file/r/${RoomId}/`;
 
-export const DownloadFile = (RoomId) => `/api/fl/file/download/${RoomId}/`;
+export const DownloadFile = (RoomId) => `/api/cmf/fl/file/ln/download/${RoomId}/`;
+
+export const StreamFile = (FileId) => `/api/cmf/fl/file/download/${FileId}`
 
 // export const GetProfile = `account/profile/`;
 

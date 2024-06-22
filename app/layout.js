@@ -4,8 +4,8 @@ import ThemeSwitcherContextProvider from "@/context/ThemeSwitcherContextProvider
 import "./globals.css";
 
 export const metadata = {
-  title: "Pazarland",
-  description: "Pazarland",
+  title: "dideban",
+  description: "dideban",
 };
 
 export default function RootLayout({ children }) {
@@ -13,11 +13,11 @@ export default function RootLayout({ children }) {
     <html dir="rtl" lang="fa">
       <head>
         <meta charset="UTF-8" />
-        <meta name="application-name" content="Pazarland" />
+        <meta name="application-name" content="dideban" />
         <meta name="apple-mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-status-bar-style" content="default" />
-        <meta name="apple-mobile-web-app-title" content="Pazarland" />
-        <meta name="description" content="Pazarland" />
+        <meta name="apple-mobile-web-app-title" content="dideban" />
+        <meta name="description" content="dideban" />
         <meta name="format-detection" content="telephone=no" />
         <meta name="mobile-web-app-capable" content="yes" />
         <meta name="theme-color" content="#ffffff" />
