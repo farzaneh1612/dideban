@@ -211,16 +211,24 @@ function createData(id,manager, numberOfmember, statusSession, actions,)
    }
 
   const removeBanUser = async (userId) =>{
-    const body = {
-      user_id:userId
-      }
-    try { 
-      const { data } = await http.delete(RemoveBanUser, body );
-    getAllUsers()
-      notify(data.message, "success");
-           } catch (e) {
-          notify(e?.response?.data?.message, "error");
-        }
+    const myHeaders = new Headers();
+myHeaders.append("Content-Type", "application/json");
+
+const raw = JSON.stringify({
+  "user_id": userId
+});
+
+const requestOptions = {
+  method: "DELETE",
+  headers: myHeaders,
+  body: raw,
+  redirect: "follow"
+};
+
+fetch("https://api.hirkanico.ir/api/cmr/rm/room/ban/remove", requestOptions)
+  .then((response) => response.text())
+  .then((result) => console.log(result), getAllUsers())
+  .catch((error) => console.error(error));
    }
 
 const rows = users?.map((user,index)=>(
@@ -265,7 +273,7 @@ const rows = users?.map((user,index)=>(
          }}
        >
         <SuccessUsers/>
-       </IconButton>)
+        </IconButton>)
        
        } )),
        
